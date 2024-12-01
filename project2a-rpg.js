@@ -5,6 +5,8 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import "wired-elements/lib/wired-combo.js";
+import "wired-elements/lib/wired-item.js";
 
 /**
  * `project2a-rpg`
@@ -21,6 +23,7 @@ export class Project2aRpg extends DDDSuper(I18NMixin(LitElement)) {
   constructor() {
     super();
     this.title = "";
+    this.seed = "0000000000"; 
     this.t = this.t || {};
     this.t = {
       ...this.t,
@@ -40,6 +43,7 @@ export class Project2aRpg extends DDDSuper(I18NMixin(LitElement)) {
     return {
       ...super.properties,
       title: { type: String },
+      seed: { type: String}
     };
   }
 
@@ -60,7 +64,19 @@ export class Project2aRpg extends DDDSuper(I18NMixin(LitElement)) {
       h3 span {
         font-size: var(--project2a-rpg-label-font-size, var(--ddd-font-size-s));
       }
+
+      
+      
     `];
+  }
+
+  _updateSeed(index, value) {
+    
+      const seedArray = this.seed.split("");
+      seedArray[index] = value; // Update the specific character
+      this.seed = seedArray.join(""); // Recombine the seed as a string
+      console.log(`Updated seed: ${this.seed}`);
+    
   }
 
   // Lit render the HTML
@@ -69,6 +85,28 @@ export class Project2aRpg extends DDDSuper(I18NMixin(LitElement)) {
 <div class="wrapper">
   <h3><span>${this.t.title}:</span> ${this.title}</h3>
   <slot></slot>
+
+  <rpg-character seed="${this.seed}"></rpg-character>
+
+  <h2>Accessories</h2>
+  <wired-combo
+          @selected="${(e) => this._updateSeed(0, e.detail.value)}"
+          selected="${this.seed[0]}"
+        >
+        <wired-item value="0"> 0</wired-item>
+        <wired-item value="1">1</wired-item>
+        <wired-item value="2"> 2</wired-item>
+        <wired-item value="3">3</wired-item>
+        <wired-item value="4">4</wired-item>
+        <wired-item value="5">5</wired-item>
+        <wired-item value="6">6</wired-item>
+        <wired-item value="7">7</wired-item>
+        <wired-item value="8">8</wired-item>
+        <wired-item value="9">9</wired-item>
+    </wired-combo>
+
+
+
 </div>`;
   }
 
